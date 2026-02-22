@@ -1,1 +1,926 @@
-//test
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Assistant 2</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-solid: #151d35;
+      --accent: #7c8cff;
+      --accent-2: #46e0c4;
+      --text: #f4f7ff;
+      --muted: #a8b5d9;
+      --danger: #ff6b8a;
+      --warning: #ffbd69;
+      --success: #49d3a8;
+      --border: rgba(255, 255, 255, 0.14);
+      --radius: 18px;
+      --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% -20%, #38468e 0%, transparent 45%),
+        radial-gradient(circle at 90% 0%, #146359 0%, transparent 30%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1200px, 92vw);
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    .hidden { display: none !important; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      font-size: 1.18rem;
+    }
+
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      position: relative;
+      background: linear-gradient(130deg, var(--accent), var(--accent-2));
+      box-shadow: 0 8px 24px rgba(74, 136, 255, 0.45);
+      overflow: hidden;
+    }
+
+    .logo::before,
+    .logo::after {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border-radius: 9px;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      transform: rotate(45deg);
+    }
+
+    .logo::after {
+      inset: 16px;
+      border-width: 3px;
+      opacity: 0.9;
+      transform: rotate(0deg);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      padding: 20px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    h1, h2, h3, h4 { margin: 0 0 12px; }
+    p { color: var(--muted); line-height: 1.5; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(70, 224, 196, 0.15);
+      color: #dbfff6;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+
+    .features {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .feature {
+      padding: 11px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.92rem;
+    }
+
+    form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 11px;
+      padding: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, rgba(124, 140, 255, 0.42), rgba(70, 224, 196, 0.3));
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+
+    input, select, textarea {
+      background: rgba(12, 20, 40, 0.75);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      width: 100%;
+      font: inherit;
+    }
+
+    textarea { min-height: 84px; resize: vertical; }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font: inherit;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: linear-gradient(130deg, var(--accent), #5dd2ff);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.11);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-danger { background: var(--danger); color: #fff; }
+
+    .stack { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .dashboard-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .metric {
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .metric h4 { font-size: 0.82rem; color: var(--muted); margin-bottom: 6px; }
+
+    .project-editor {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 12px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    th, td {
+      padding: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { color: var(--muted); font-weight: 600; }
+
+    .badge {
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .preview-list {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .preview-list img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .group-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .group-item {
+      padding: 10px;
+      border-radius: 11px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .notice { color: var(--muted); font-size: 0.9rem; }
+
+    @media (max-width: 980px) {
+      .hero, .project-editor { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand"><span class="logo" aria-hidden="true"></span>Project Assistant 2</div>
+      <div id="sessionActions" class="stack hidden">
+        <span id="welcomeUser" class="notice"></span>
+        <button class="btn-secondary" id="logoutBtn">Se déconnecter</button>
+      </div>
+    </header>
+
+    <section id="landingView">
+      <div class="hero">
+        <article class="card">
+          <span class="pill">✨ 100% gratuit · Simple · Moderne</span>
+          <h1>Pilotez vos projets de façon claire et instantanée.</h1>
+          <p>
+            <strong>Project Assistant 2</strong> centralise vos tâches, vos heures et vos coûts pour vous donner un suivi fiable en temps réel.
+            Créez vos projets, organisez les tâches par catégorie ou priorité, et partagez des captures directement dans les commentaires.
+          </p>
+          <div class="features">
+            <div class="feature">✅ Suivi de charge consommée/restante</div>
+            <div class="feature">✅ Suivi de budget en euros</div>
+            <div class="feature">✅ Vue d’avancement en direct</div>
+            <div class="feature">✅ Gestion des catégories & priorités</div>
+          </div>
+        </article>
+
+        <aside class="card">
+          <div class="auth-tabs">
+            <button class="tab active" data-mode="login">Connexion</button>
+            <button class="tab" data-mode="register">Créer un compte</button>
+          </div>
+          <form id="authForm">
+            <input type="text" id="authName" placeholder="Nom" class="hidden" />
+            <input type="email" id="authEmail" placeholder="Email" required />
+            <input type="password" id="authPassword" placeholder="Mot de passe" required />
+            <button class="btn-primary" type="submit" id="authSubmit">Se connecter</button>
+            <p id="authMessage" class="notice"></p>
+          </form>
+        </aside>
+      </div>
+    </section>
+
+    <section id="dashboardView" class="hidden">
+      <div class="card">
+        <div class="dashboard-top">
+          <h2>Mes projets</h2>
+          <button class="btn-primary" id="newProjectBtn">+ Nouveau projet</button>
+        </div>
+        <form id="projectForm" class="hidden">
+          <input id="projectName" placeholder="Nom du projet" required />
+          <textarea id="projectDescription" placeholder="Description"></textarea>
+          <div class="stack">
+            <button class="btn-primary" type="submit">Enregistrer le projet</button>
+            <button class="btn-secondary" type="button" id="cancelProjectBtn">Annuler</button>
+          </div>
+        </form>
+        <div id="projectList" class="project-grid"></div>
+      </div>
+
+      <div id="projectWorkspace" class="hidden" style="margin-top:12px">
+        <div class="card">
+          <div class="section-title">
+            <h3 id="workspaceTitle">Projet</h3>
+            <div class="stack">
+              <label for="groupBy" class="notice">Regrouper:</label>
+              <select id="groupBy">
+                <option value="category">Par catégorie</option>
+                <option value="priority">Par priorité</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="metrics" class="metrics"></div>
+
+          <div class="project-editor">
+            <div class="card" style="background:rgba(0,0,0,0.13)">
+              <div class="section-title">
+                <h4>Tâches</h4>
+              </div>
+              <div style="overflow:auto; max-height:350px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Libellé</th>
+                      <th>Catégorie</th>
+                      <th>Priorité</th>
+                      <th>h. total</th>
+                      <th>€ total</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="taskTableBody"></tbody>
+                </table>
+              </div>
+              <div id="groupedTasks" class="group-list"></div>
+            </div>
+
+            <div class="card" style="background:rgba(0,0,0,0.13)">
+              <h4 id="taskFormTitle">Nouvelle tâche</h4>
+              <form id="taskForm">
+                <input id="taskLabel" placeholder="Libellé" required />
+                <select id="taskCategory" required></select>
+                <select id="taskPriority" required>
+                  <option value="Basse">Basse</option>
+                  <option value="Moyenne">Moyenne</option>
+                  <option value="Haute">Haute</option>
+                  <option value="Critique">Critique</option>
+                </select>
+                <input id="hoursSpent" type="number" min="0" step="0.1" placeholder="Charge consommée (h)" required />
+                <input id="hoursRemaining" type="number" min="0" step="0.1" placeholder="Charge restante (h)" required />
+                <input id="costSpent" type="number" min="0" step="0.1" placeholder="Coût consommé (€)" required />
+                <input id="costRemaining" type="number" min="0" step="0.1" placeholder="Coût restant (€)" required />
+                <textarea id="taskComment" placeholder="Commentaire"></textarea>
+                <label class="notice">Captures d’écran</label>
+                <input id="taskShots" type="file" accept="image/*" multiple />
+                <div id="shotPreview" class="preview-list"></div>
+                <div class="stack">
+                  <button class="btn-primary" type="submit">Enregistrer la tâche</button>
+                  <button class="btn-secondary" type="button" id="resetTaskBtn">Réinitialiser</button>
+                </div>
+              </form>
+
+              <hr style="border-color:rgba(255,255,255,0.15)">
+              <h4>Catégories</h4>
+              <form id="categoryForm">
+                <input id="categoryName" placeholder="Nom de catégorie" required />
+                <div class="stack">
+                  <button class="btn-secondary" type="submit">Ajouter</button>
+                </div>
+              </form>
+              <div id="categoryList" class="group-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "pa2_db_v1";
+    const SESSION_KEY = "pa2_session_user";
+
+    const state = {
+      db: loadDB(),
+      user: null,
+      authMode: "login",
+      selectedProjectId: null,
+      editingTaskId: null,
+      pendingScreenshots: [],
+    };
+
+    const el = {
+      landingView: document.getElementById("landingView"),
+      dashboardView: document.getElementById("dashboardView"),
+      sessionActions: document.getElementById("sessionActions"),
+      welcomeUser: document.getElementById("welcomeUser"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      tabs: Array.from(document.querySelectorAll(".tab")),
+      authForm: document.getElementById("authForm"),
+      authName: document.getElementById("authName"),
+      authEmail: document.getElementById("authEmail"),
+      authPassword: document.getElementById("authPassword"),
+      authSubmit: document.getElementById("authSubmit"),
+      authMessage: document.getElementById("authMessage"),
+      newProjectBtn: document.getElementById("newProjectBtn"),
+      projectForm: document.getElementById("projectForm"),
+      projectName: document.getElementById("projectName"),
+      projectDescription: document.getElementById("projectDescription"),
+      cancelProjectBtn: document.getElementById("cancelProjectBtn"),
+      projectList: document.getElementById("projectList"),
+      projectWorkspace: document.getElementById("projectWorkspace"),
+      workspaceTitle: document.getElementById("workspaceTitle"),
+      metrics: document.getElementById("metrics"),
+      groupBy: document.getElementById("groupBy"),
+      taskTableBody: document.getElementById("taskTableBody"),
+      groupedTasks: document.getElementById("groupedTasks"),
+      taskForm: document.getElementById("taskForm"),
+      taskFormTitle: document.getElementById("taskFormTitle"),
+      taskLabel: document.getElementById("taskLabel"),
+      taskCategory: document.getElementById("taskCategory"),
+      taskPriority: document.getElementById("taskPriority"),
+      hoursSpent: document.getElementById("hoursSpent"),
+      hoursRemaining: document.getElementById("hoursRemaining"),
+      costSpent: document.getElementById("costSpent"),
+      costRemaining: document.getElementById("costRemaining"),
+      taskComment: document.getElementById("taskComment"),
+      taskShots: document.getElementById("taskShots"),
+      shotPreview: document.getElementById("shotPreview"),
+      resetTaskBtn: document.getElementById("resetTaskBtn"),
+      categoryForm: document.getElementById("categoryForm"),
+      categoryName: document.getElementById("categoryName"),
+      categoryList: document.getElementById("categoryList"),
+    };
+
+    bindEvents();
+    hydrateSession();
+    render();
+
+    function bindEvents() {
+      el.tabs.forEach((tab) => tab.addEventListener("click", () => setAuthMode(tab.dataset.mode)));
+      el.authForm.addEventListener("submit", handleAuth);
+      el.logoutBtn.addEventListener("click", logout);
+      el.newProjectBtn.addEventListener("click", () => el.projectForm.classList.remove("hidden"));
+      el.cancelProjectBtn.addEventListener("click", () => {
+        el.projectForm.reset();
+        el.projectForm.classList.add("hidden");
+      });
+      el.projectForm.addEventListener("submit", handleProjectCreate);
+      el.groupBy.addEventListener("change", renderWorkspace);
+      el.taskForm.addEventListener("submit", handleTaskSave);
+      el.resetTaskBtn.addEventListener("click", resetTaskForm);
+      el.taskShots.addEventListener("change", handleScreenshots);
+      el.categoryForm.addEventListener("submit", handleCategoryCreate);
+    }
+
+    function loadDB() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : { users: [], projects: [] };
+    }
+
+    function saveDB() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.db));
+    }
+
+    function hydrateSession() {
+      const userId = localStorage.getItem(SESSION_KEY);
+      if (!userId) return;
+      state.user = state.db.users.find((u) => u.id === userId) || null;
+    }
+
+    function setAuthMode(mode) {
+      state.authMode = mode;
+      el.tabs.forEach((t) => t.classList.toggle("active", t.dataset.mode === mode));
+      el.authName.classList.toggle("hidden", mode !== "register");
+      el.authName.required = mode === "register";
+      el.authSubmit.textContent = mode === "register" ? "Créer mon compte" : "Se connecter";
+      el.authMessage.textContent = "";
+    }
+
+    function handleAuth(e) {
+      e.preventDefault();
+      const email = el.authEmail.value.trim().toLowerCase();
+      const password = el.authPassword.value;
+      if (state.authMode === "register") {
+        const name = el.authName.value.trim();
+        if (state.db.users.some((u) => u.email === email)) {
+          el.authMessage.textContent = "Un compte existe déjà avec cet email.";
+          return;
+        }
+        const user = { id: crypto.randomUUID(), name, email, password };
+        state.db.users.push(user);
+        state.user = user;
+      } else {
+        const user = state.db.users.find((u) => u.email === email && u.password === password);
+        if (!user) {
+          el.authMessage.textContent = "Identifiants invalides.";
+          return;
+        }
+        state.user = user;
+      }
+      localStorage.setItem(SESSION_KEY, state.user.id);
+      saveDB();
+      el.authForm.reset();
+      state.selectedProjectId = null;
+      render();
+    }
+
+    function logout() {
+      state.user = null;
+      state.selectedProjectId = null;
+      localStorage.removeItem(SESSION_KEY);
+      render();
+    }
+
+    function currentProjects() {
+      if (!state.user) return [];
+      return state.db.projects.filter((p) => p.userId === state.user.id);
+    }
+
+    function handleProjectCreate(e) {
+      e.preventDefault();
+      const project = {
+        id: crypto.randomUUID(),
+        userId: state.user.id,
+        name: el.projectName.value.trim(),
+        description: el.projectDescription.value.trim(),
+        categories: [{ id: crypto.randomUUID(), name: "Général" }],
+        tasks: [],
+      };
+      state.db.projects.push(project);
+      saveDB();
+      el.projectForm.reset();
+      el.projectForm.classList.add("hidden");
+      state.selectedProjectId = project.id;
+      render();
+    }
+
+    function selectProject(projectId) {
+      state.selectedProjectId = projectId;
+      resetTaskForm();
+      renderWorkspace();
+      el.projectWorkspace.classList.remove("hidden");
+    }
+
+    function deleteProject(projectId) {
+      if (!confirm("Supprimer ce projet ?")) return;
+      state.db.projects = state.db.projects.filter((p) => p.id !== projectId);
+      if (state.selectedProjectId === projectId) state.selectedProjectId = null;
+      saveDB();
+      render();
+    }
+
+    function getSelectedProject() {
+      return currentProjects().find((p) => p.id === state.selectedProjectId) || null;
+    }
+
+    async function handleScreenshots(e) {
+      const files = Array.from(e.target.files || []);
+      state.pendingScreenshots = await Promise.all(files.map(fileToDataUrl));
+      renderShotPreview(state.pendingScreenshots);
+    }
+
+    function fileToDataUrl(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function handleTaskSave(e) {
+      e.preventDefault();
+      const project = getSelectedProject();
+      if (!project) return;
+      const task = {
+        id: state.editingTaskId || crypto.randomUUID(),
+        label: el.taskLabel.value.trim(),
+        categoryId: el.taskCategory.value,
+        priority: el.taskPriority.value,
+        hoursSpent: +el.hoursSpent.value,
+        hoursRemaining: +el.hoursRemaining.value,
+        costSpent: +el.costSpent.value,
+        costRemaining: +el.costRemaining.value,
+        comment: el.taskComment.value.trim(),
+        screenshots: state.pendingScreenshots,
+      };
+
+      const index = project.tasks.findIndex((t) => t.id === task.id);
+      if (index >= 0) {
+        if (!task.screenshots.length) task.screenshots = project.tasks[index].screenshots || [];
+        project.tasks[index] = task;
+      } else {
+        project.tasks.push(task);
+      }
+      saveDB();
+      resetTaskForm();
+      renderWorkspace();
+      renderProjectList();
+    }
+
+    function resetTaskForm() {
+      state.editingTaskId = null;
+      state.pendingScreenshots = [];
+      el.taskForm.reset();
+      el.taskFormTitle.textContent = "Nouvelle tâche";
+      renderShotPreview([]);
+      populateCategorySelect();
+    }
+
+    function editTask(taskId) {
+      const project = getSelectedProject();
+      const task = project?.tasks.find((t) => t.id === taskId);
+      if (!task) return;
+      state.editingTaskId = task.id;
+      state.pendingScreenshots = task.screenshots || [];
+      el.taskFormTitle.textContent = "Modifier la tâche";
+      el.taskLabel.value = task.label;
+      el.taskCategory.value = task.categoryId;
+      el.taskPriority.value = task.priority;
+      el.hoursSpent.value = task.hoursSpent;
+      el.hoursRemaining.value = task.hoursRemaining;
+      el.costSpent.value = task.costSpent;
+      el.costRemaining.value = task.costRemaining;
+      el.taskComment.value = task.comment;
+      renderShotPreview(state.pendingScreenshots);
+    }
+
+    function deleteTask(taskId) {
+      const project = getSelectedProject();
+      if (!project) return;
+      project.tasks = project.tasks.filter((t) => t.id !== taskId);
+      saveDB();
+      renderWorkspace();
+      renderProjectList();
+    }
+
+    function handleCategoryCreate(e) {
+      e.preventDefault();
+      const project = getSelectedProject();
+      if (!project) return;
+      const name = el.categoryName.value.trim();
+      if (!name || project.categories.some((c) => c.name.toLowerCase() === name.toLowerCase())) return;
+      project.categories.push({ id: crypto.randomUUID(), name });
+      el.categoryForm.reset();
+      saveDB();
+      renderWorkspace();
+    }
+
+    function renameCategory(categoryId) {
+      const project = getSelectedProject();
+      const category = project?.categories.find((c) => c.id === categoryId);
+      if (!category) return;
+      const name = prompt("Nouveau nom de catégorie", category.name);
+      if (!name) return;
+      category.name = name.trim();
+      saveDB();
+      renderWorkspace();
+    }
+
+    function deleteCategory(categoryId) {
+      const project = getSelectedProject();
+      if (!project || project.categories.length === 1) return;
+      const replacement = project.categories.find((c) => c.id !== categoryId);
+      project.tasks.forEach((t) => {
+        if (t.categoryId === categoryId) t.categoryId = replacement.id;
+      });
+      project.categories = project.categories.filter((c) => c.id !== categoryId);
+      saveDB();
+      renderWorkspace();
+    }
+
+    function populateCategorySelect() {
+      const project = getSelectedProject();
+      if (!project) {
+        el.taskCategory.innerHTML = "";
+        return;
+      }
+      el.taskCategory.innerHTML = project.categories
+        .map((c) => `<option value="${c.id}">${c.name}</option>`)
+        .join("");
+    }
+
+    function render() {
+      const logged = Boolean(state.user);
+      el.landingView.classList.toggle("hidden", logged);
+      el.dashboardView.classList.toggle("hidden", !logged);
+      el.sessionActions.classList.toggle("hidden", !logged);
+
+      if (!logged) return;
+      el.welcomeUser.textContent = `Connecté: ${state.user.name}`;
+      renderProjectList();
+      if (state.selectedProjectId) {
+        el.projectWorkspace.classList.remove("hidden");
+        renderWorkspace();
+      } else {
+        el.projectWorkspace.classList.add("hidden");
+      }
+    }
+
+    function renderProjectList() {
+      const projects = currentProjects();
+      if (!projects.length) {
+        el.projectList.innerHTML = `<p class="notice">Aucun projet pour le moment. Créez votre premier projet 👇</p>`;
+        return;
+      }
+      el.projectList.innerHTML = projects.map((p) => {
+        const taskCount = p.tasks.length;
+        return `
+          <article class="project-card">
+            <h4>${escapeHtml(p.name)}</h4>
+            <p class="notice">${escapeHtml(p.description || "Sans description")}</p>
+            <p class="notice">${taskCount} tâche(s) · ${p.categories.length} catégorie(s)</p>
+            <div class="stack">
+              <button class="btn-primary" data-action="open" data-id="${p.id}">Ouvrir</button>
+              <button class="btn-danger" data-action="delete" data-id="${p.id}">Supprimer</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      el.projectList.querySelectorAll("button").forEach((btn) => {
+        const id = btn.dataset.id;
+        if (btn.dataset.action === "open") btn.onclick = () => selectProject(id);
+        if (btn.dataset.action === "delete") btn.onclick = () => deleteProject(id);
+      });
+    }
+
+    function renderWorkspace() {
+      const project = getSelectedProject();
+      if (!project) return;
+      el.workspaceTitle.textContent = `${project.name}`;
+      populateCategorySelect();
+      renderMetrics(project);
+      renderTaskTable(project);
+      renderGrouped(project);
+      renderCategoryList(project);
+    }
+
+    function renderMetrics(project) {
+      const tasks = project.tasks;
+      const totals = tasks.reduce((acc, t) => {
+        acc.hoursSpent += t.hoursSpent;
+        acc.hoursRemaining += t.hoursRemaining;
+        acc.costSpent += t.costSpent;
+        acc.costRemaining += t.costRemaining;
+        return acc;
+      }, { hoursSpent: 0, hoursRemaining: 0, costSpent: 0, costRemaining: 0 });
+
+      const totalTasks = tasks.length;
+      const doneTasks = tasks.filter((t) => t.hoursRemaining === 0 && t.costRemaining === 0).length;
+      const hoursTotal = totals.hoursSpent + totals.hoursRemaining;
+      const costTotal = totals.costSpent + totals.costRemaining;
+
+      el.metrics.innerHTML = `
+        <div class="metric"><h4>Avancement tâches</h4><strong>${doneTasks}/${totalTasks || 0}</strong></div>
+        <div class="metric"><h4>Heures</h4><strong>${totals.hoursSpent.toFixed(1)}h / ${hoursTotal.toFixed(1)}h</strong></div>
+        <div class="metric"><h4>Coûts</h4><strong>${totals.costSpent.toFixed(1)}€ / ${costTotal.toFixed(1)}€</strong></div>
+      `;
+    }
+
+    function renderTaskTable(project) {
+      if (!project.tasks.length) {
+        el.taskTableBody.innerHTML = `<tr><td colspan="6" class="notice">Aucune tâche pour ce projet.</td></tr>`;
+        return;
+      }
+      el.taskTableBody.innerHTML = project.tasks.map((t) => {
+        const category = project.categories.find((c) => c.id === t.categoryId)?.name || "-";
+        const hoursTotal = t.hoursSpent + t.hoursRemaining;
+        const costTotal = t.costSpent + t.costRemaining;
+        return `
+          <tr>
+            <td>${escapeHtml(t.label)}<br><small class="notice">${escapeHtml(t.comment || "")}</small>${renderThumbs(t.screenshots)}</td>
+            <td>${escapeHtml(category)}</td>
+            <td><span class="badge">${t.priority}</span></td>
+            <td>${hoursTotal.toFixed(1)}h</td>
+            <td>${costTotal.toFixed(1)}€</td>
+            <td>
+              <div class="stack">
+                <button class="btn-secondary" data-t="edit" data-id="${t.id}">Modifier</button>
+                <button class="btn-danger" data-t="delete" data-id="${t.id}">Suppr.</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      el.taskTableBody.querySelectorAll("button").forEach((btn) => {
+        const id = btn.dataset.id;
+        if (btn.dataset.t === "edit") btn.onclick = () => editTask(id);
+        if (btn.dataset.t === "delete") btn.onclick = () => deleteTask(id);
+      });
+    }
+
+    function renderThumbs(shots = []) {
+      if (!shots.length) return "";
+      return `<div class="preview-list">${shots.map((s) => `<img src="${s}" alt="capture">`).join("")}</div>`;
+    }
+
+    function renderShotPreview(shots) {
+      el.shotPreview.innerHTML = shots.map((s) => `<img src="${s}" alt="aperçu capture">`).join("");
+    }
+
+    function renderGrouped(project) {
+      const mode = el.groupBy.value;
+      const groups = {};
+      project.tasks.forEach((task) => {
+        const key = mode === "category"
+          ? (project.categories.find((c) => c.id === task.categoryId)?.name || "Sans catégorie")
+          : task.priority;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(task);
+      });
+      const keys = Object.keys(groups);
+      if (!keys.length) {
+        el.groupedTasks.innerHTML = "";
+        return;
+      }
+      el.groupedTasks.innerHTML = keys.map((k) => `<div class="group-item"><strong>${k}</strong> · ${groups[k].length} tâche(s)</div>`).join("");
+    }
+
+    function renderCategoryList(project) {
+      el.categoryList.innerHTML = project.categories.map((c) => `
+        <div class="group-item">
+          <div class="section-title">
+            <strong>${escapeHtml(c.name)}</strong>
+            <div class="stack">
+              <button class="btn-secondary" data-c="rename" data-id="${c.id}">Modifier</button>
+              <button class="btn-danger" data-c="delete" data-id="${c.id}" ${project.categories.length === 1 ? "disabled" : ""}>Supprimer</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+
+      el.categoryList.querySelectorAll("button").forEach((btn) => {
+        const id = btn.dataset.id;
+        if (btn.dataset.c === "rename") btn.onclick = () => renameCategory(id);
+        if (btn.dataset.c === "delete") btn.onclick = () => deleteCategory(id);
+      });
+    }
+
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+  </script>
+</body>
+</html>
