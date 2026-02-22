@@ -125,6 +125,34 @@
       gap: 10px;
     }
 
+    .hero-gallery {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .hero-gallery figure {
+      margin: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .hero-gallery img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-gallery figcaption {
+      padding: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
     .feature {
       padding: 11px 12px;
       border-radius: 12px;
@@ -336,6 +364,20 @@
             <div class="feature">✅ Suivi de budget en euros</div>
             <div class="feature">✅ Vue d’avancement en direct</div>
             <div class="feature">✅ Gestion des catégories & priorités</div>
+          </div>
+          <div class="hero-gallery" aria-label="Aperçu visuel de l'application">
+            <figure>
+              <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80" alt="Équipe en réunion projet" loading="lazy" />
+              <figcaption>Planification collaborative</figcaption>
+            </figure>
+            <figure>
+              <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80" alt="Tableau de suivi sur ordinateur" loading="lazy" />
+              <figcaption>Suivi des tâches en temps réel</figcaption>
+            </figure>
+            <figure>
+              <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80" alt="Analyse de données de projet" loading="lazy" />
+              <figcaption>Analyse budget et charge</figcaption>
+            </figure>
           </div>
         </article>
 
