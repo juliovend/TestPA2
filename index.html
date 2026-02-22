@@ -237,6 +237,37 @@
 
     .metric h4 { font-size: 0.82rem; color: var(--muted); margin-bottom: 6px; }
 
+    .progress-wrap {
+      margin-top: 8px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .progress-track {
+      height: 10px;
+      width: 100%;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      transition: width 0.25s ease;
+    }
+
+    .progress-fill.tasks { background: linear-gradient(90deg, #5f8dff, #7c8cff); }
+    .progress-fill.hours { background: linear-gradient(90deg, #49d3a8, #46e0c4); }
+    .progress-fill.costs { background: linear-gradient(90deg, #ff8b7c, #ffbd69); }
+
+    .progress-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
     .project-editor {
       display: grid;
       grid-template-columns: 1.2fr 1fr;
@@ -825,11 +856,35 @@
       const doneTasks = tasks.filter((t) => t.hoursRemaining === 0 && t.costRemaining === 0).length;
       const hoursTotal = totals.hoursSpent + totals.hoursRemaining;
       const costTotal = totals.costSpent + totals.costRemaining;
+      const taskProgress = totalTasks ? (doneTasks / totalTasks) * 100 : 0;
+      const hourProgress = hoursTotal ? (totals.hoursSpent / hoursTotal) * 100 : 0;
+      const costProgress = costTotal ? (totals.costSpent / costTotal) * 100 : 0;
 
       el.metrics.innerHTML = `
-        <div class="metric"><h4>Avancement tâches</h4><strong>${doneTasks}/${totalTasks || 0}</strong></div>
-        <div class="metric"><h4>Heures</h4><strong>${totals.hoursSpent.toFixed(1)}h / ${hoursTotal.toFixed(1)}h</strong></div>
-        <div class="metric"><h4>Coûts</h4><strong>${totals.costSpent.toFixed(1)}€ / ${costTotal.toFixed(1)}€</strong></div>
+        <div class="metric">
+          <h4>Avancement tâches</h4>
+          <strong>${doneTasks}/${totalTasks || 0}</strong>
+          <div class="progress-wrap">
+            <div class="progress-track"><div class="progress-fill tasks" style="width:${taskProgress.toFixed(1)}%"></div></div>
+            <span class="progress-label">${taskProgress.toFixed(0)}%</span>
+          </div>
+        </div>
+        <div class="metric">
+          <h4>Heures</h4>
+          <strong>${totals.hoursSpent.toFixed(1)}h / ${hoursTotal.toFixed(1)}h</strong>
+          <div class="progress-wrap">
+            <div class="progress-track"><div class="progress-fill hours" style="width:${hourProgress.toFixed(1)}%"></div></div>
+            <span class="progress-label">${hourProgress.toFixed(0)}%</span>
+          </div>
+        </div>
+        <div class="metric">
+          <h4>Coûts</h4>
+          <strong>${totals.costSpent.toFixed(1)}€ / ${costTotal.toFixed(1)}€</strong>
+          <div class="progress-wrap">
+            <div class="progress-track"><div class="progress-fill costs" style="width:${costProgress.toFixed(1)}%"></div></div>
+            <span class="progress-label">${costProgress.toFixed(0)}%</span>
+          </div>
+        </div>
       `;
     }
 
