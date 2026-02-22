@@ -27,11 +27,57 @@
       margin: 0;
       font-family: "Inter", "Segoe UI", sans-serif;
       color: var(--text);
-      background:
-        radial-gradient(circle at 10% -20%, #38468e 0%, transparent 45%),
-        radial-gradient(circle at 90% 0%, #146359 0%, transparent 30%),
-        var(--bg);
+      background: var(--bg);
       min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      z-index: -2;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    body::before {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(124, 140, 255, 0.45) 0%, transparent 40%),
+        radial-gradient(circle at 82% 26%, rgba(70, 224, 196, 0.35) 0%, transparent 34%),
+        radial-gradient(circle at 62% 82%, rgba(93, 143, 255, 0.28) 0%, transparent 36%);
+      animation: backgroundDriftA 34s ease-in-out infinite alternate;
+    }
+
+    body::after {
+      z-index: -3;
+      opacity: 0.85;
+      filter: blur(10px);
+      background:
+        radial-gradient(circle at 75% 68%, rgba(93, 210, 255, 0.24) 0%, transparent 42%),
+        radial-gradient(circle at 25% 78%, rgba(124, 140, 255, 0.22) 0%, transparent 40%);
+      animation: backgroundDriftB 46s linear infinite alternate;
+    }
+
+    @keyframes backgroundDriftA {
+      0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+      50% { transform: translate3d(2%, 2%, 0) scale(1.05); }
+      100% { transform: translate3d(4%, -1%, 0) scale(1.08); }
+    }
+
+    @keyframes backgroundDriftB {
+      0% { transform: translate3d(2%, 1%, 0) scale(1.02); }
+      50% { transform: translate3d(-3%, -2%, 0) scale(1.08); }
+      100% { transform: translate3d(1%, 3%, 0) scale(1.1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body::before,
+      body::after {
+        animation: none;
+      }
     }
 
     .container {
